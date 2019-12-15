@@ -1,22 +1,24 @@
 /******************************************************************************
-
                               Online C++ Compiler.
                Code, Compile, Run and Debug C++ program online.
 Write your code in this editor and press "Run" button to compile and execute it.
-
 *******************************************************************************/
 
 #include <iostream>
 #include <string>
+#include <string.h>
 
 using namespace std;
 
-char bingo_board[5][5] = 
-    {{'U','R','L','P','M'},
-    {'X','P','R','E','T'},
-    {'G','I','A','E','T'},
-    {'X','T','N','Z','Y'},
-    {'X','O','Q','R','S'}};
+int testcase_num;
+char input_bingo_board[5][5];
+int cache[5][5];
+int words_num;
+string word;
+
+
+
+
     
 int eight_direction_x[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int eight_direction_y[8] = {-1, -1, -1, 0, 0, 1, 1, 1}; 
@@ -33,11 +35,20 @@ bool hasWord(int y, int x, const string& word){
         return false;
     }
     
-    if (bingo_board[y][x] != word[0]){
+    if (input_bingo_board[y][x] != word[0]){
         return false;
     }
     
     if (word.size() == 1){
+        return true;
+    }
+    
+    int& ret = cache[y][x];
+    
+    if (ret != -1){
+        if (ret == 0){
+            return false;
+        }
         return true;
     }
     
@@ -51,18 +62,42 @@ bool hasWord(int y, int x, const string& word){
     
 }
 
+string check_answers(){
+    cin >> testcase_num;
+    
+    for (int i = 0; i < testcase_num; i++){
+        string found_word = "NO";
+        memset(cache,-1,sizeof(cache));
+        //filling input_bingo_board
+        for (int y = 0; y < 5; y++){
+            string row_bingo_board;
+            cin >> row_bingo_board;
+            for (int x = 0; x < 5; x++){
+                input_bingo_board[y][x] = row_bingo_board[x];
+            }
+        }
+        
+        cin >> words_num;
+        
+        for (int j = 0; j < words_num; j++){
+            cin >> word;
+            for (int y = 0; y < 5; y++){
+                for (int x = 0; x < 5; x++){
+                    if (hasWord(y,x,word)){
+                        found_word = "YES";
+                    }
+                }
+            }
+            
+        }
+        cout << found_word;
+    }
+}
+
 int main()
 {
     
     
-    
-  
-    
-    
-    
-    cout << hasWord(0, 3, "PRETTY");
-
+    check_answers();
     return 0;
 }
-
-
