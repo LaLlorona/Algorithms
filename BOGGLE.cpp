@@ -12,7 +12,7 @@ using namespace std;
 
 int testcase_num;
 char input_bingo_board[5][5];
-int cache[5][5];
+int cache[5][5][10];
 int words_num;
 string word;
 
@@ -23,51 +23,55 @@ string word;
 int eight_direction_x[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int eight_direction_y[8] = {-1, -1, -1, 0, 0, 1, 1, 1}; 
 
-bool outOfRange(int y, int x){
+int outOfRange(int y, int x){
     if ((x < 0) || (x > 4) || (y < 0) || (y > 4)){
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
 
-bool hasWord(int y, int x, const string& word){
-    if (outOfRange(y,x)){
-        return false;
+int hasWord(int y, int x, int index, const string& word){
+    if (outOfRange(y,x) == 1){
+        return 0;
     }
     
-    if (input_bingo_board[y][x] != word[0]){
-        return false;
-    }
-    
-    if (word.size() == 1){
-        return true;
-    }
-    
-    int& ret = cache[y][x];
+    int& ret = cache[y][x][index];
     
     if (ret != -1){
-        if (ret == 0){
-            return false;
-        }
-        return true;
+        return ret;
     }
+    
+     if (input_bingo_board[y][x] != word[index]){
+        ret = 0;
+        return 0;
+    }
+    
+    if ((index +1) >= word.size()){
+        ret = 1;
+        return 1;
+    }
+    
+    
     
     
     for (int i = 0 ; i < 8; i ++){
-        if (hasWord(y + eight_direction_y[i], x + eight_direction_x[i], word.substr(1))){
-            return true;
+        if (hasWord(y + eight_direction_y[i], x + eight_direction_x[i], index+1, word)){
+            ret = 1;
+            return 1;
         }
+        
     }
-    return false;
+
+    return ret = 0;
     
 }
 
-string check_answers(){
+void check_answers(){
     cin >> testcase_num;
     
     for (int i = 0; i < testcase_num; i++){
-        string found_word = "NO";
-        memset(cache,-1,sizeof(cache));
+        string found_word;
+        
         //filling input_bingo_board
         for (int y = 0; y < 5; y++){
             string row_bingo_board;
@@ -81,16 +85,27 @@ string check_answers(){
         
         for (int j = 0; j < words_num; j++){
             cin >> word;
+            found_word = "NO";
+           
             for (int y = 0; y < 5; y++){
                 for (int x = 0; x < 5; x++){
-                    if (hasWord(y,x,word)){
+                    memset(cache,-1,sizeof(cache));
+                    if (hasWord(y,x,0,word) == 1){
                         found_word = "YES";
+                        break;
                     }
                 }
+                if(found_word == "YES"){
+                    break;
+                }
             }
+            cout << word;
+            cout << " ";
+
+            cout << found_word << endl;
             
         }
-        cout << found_word;
+        
     }
 }
 
