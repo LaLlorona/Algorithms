@@ -14,7 +14,7 @@ int countParing(bool matched[10],int number_children){
     int first_unmatched_child = -1;
     
     for (int i = 0; i < number_children; i++){
-        if(matched[i] ==false){
+        if(matched[i] == 0 ){
             first_unmatched_child = i;
             break;
         }
@@ -30,16 +30,16 @@ int countParing(bool matched[10],int number_children){
         
         if(are_friends[first_unmatched_child][friend_cand]){
             
-            matched[friend_cand] = true;
+            matched[friend_cand] = matched[first_unmatched_child] = true;
             ret +=countParing(matched, number_children);
-            matched[friend_cand] = false;
+            matched[friend_cand] = matched[first_unmatched_child] = false;
         }
     }
     return ret;
 }
 
 void checkAnswer(){
-     cin >> num_testcase;
+    cin >> num_testcase;
     for (int i =0 ; i < num_testcase; i++){
         memset(are_friends,0,sizeof(are_friends));
         cin >> num_children;
@@ -61,8 +61,12 @@ void checkAnswer(){
             cout << endl;
         }
         
-        cout<< num_children;
-        cout << num_pairs;
+   
+        
+        cout << num_children << endl;
+        
+        cout << num_pairs << endl;
+        
         
         cout << countParing(initial,num_children);
     }
