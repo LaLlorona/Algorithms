@@ -1,0 +1,68 @@
+
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+int num_testcase;
+int num_children;
+int num_pairs;
+bool are_friends[10][10];
+
+int countParing(bool matched[10],int number_children){
+    int first_unmatched_child = -1;
+    
+    for (int i = 0; i < number_children; i++){
+        if(matched[i] ==false){
+            first_unmatched_child = i;
+            break;
+        }
+    }
+    
+    if(first_unmatched_child == -1){
+        return 1;
+    }
+    
+    int ret = 0;
+    
+    for (int friend_cand = 0; friend_cand < number_children; friend_cand++){
+        
+        if(are_friends[first_unmatched_child][friend_cand]){
+            
+            matched[friend_cand] = true;
+            ret +=countParing(matched, number_children);
+            matched[friend_cand] = false;
+        }
+    }
+    return ret;
+}
+
+void checkAnswer(){
+    
+    
+    
+}
+
+int main()
+{
+    cin >> num_testcase;
+    for (int i =0 ; i < num_testcase; i++){
+        memset(are_friends,0,sizeof(are_friends));
+        cin >> num_children;
+        cin >> num_pairs;
+        int first_friend;
+        int second_friend;
+        for (int j = 0; j < num_pairs; j++){
+            cin >> first_friend;
+            cin >> second_friend;
+            are_friends[first_friend][second_friend] = 1;
+            are_friends[second_friend][first_friend] = 1;
+        }
+        bool initial[10] = {0,0,0,0,0,0,0,0,0,0};
+        cout << countParing(initial,num_children);
+    }
+    
+
+    return 0;
+}
