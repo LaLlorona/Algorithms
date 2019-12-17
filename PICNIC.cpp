@@ -39,14 +39,7 @@ int countParing(bool matched[10],int number_children){
 }
 
 void checkAnswer(){
-    
-    
-    
-}
-
-int main()
-{
-    cin >> num_testcase;
+     cin >> num_testcase;
     for (int i =0 ; i < num_testcase; i++){
         memset(are_friends,0,sizeof(are_friends));
         cin >> num_children;
@@ -59,10 +52,28 @@ int main()
             are_friends[first_friend][second_friend] = 1;
             are_friends[second_friend][first_friend] = 1;
         }
-        bool initial[10] = {0,0,0,0,0,0,0,0,0,0};
+        bool initial[10] = {false,false,false,false,false,false,false,false,false,false};
+        
+        for (int y = 0; y < 10; y++){
+            for (int x = 0; x < 10; x++){
+                cout<< are_friends[y][x] ;
+            }
+            cout << endl;
+        }
+        
+        cout<< num_children;
+        cout << num_pairs;
+        
         cout << countParing(initial,num_children);
     }
     
+    
+}
+
+int main()
+{
+   
+    checkAnswer();
 
     return 0;
 }
