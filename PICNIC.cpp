@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <string.h>
 
@@ -28,7 +27,7 @@ int countParing(bool matched[10],int number_children){
     
     for (int friend_cand = 0; friend_cand < number_children; friend_cand++){
         
-        if(are_friends[first_unmatched_child][friend_cand]){
+        if((are_friends[first_unmatched_child][friend_cand]) && (!matched[friend_cand])){
             
             matched[friend_cand] = matched[first_unmatched_child] = true;
             ret +=countParing(matched, number_children);
@@ -54,21 +53,9 @@ void checkAnswer(){
         }
         bool initial[10] = {false,false,false,false,false,false,false,false,false,false};
         
-        for (int y = 0; y < 10; y++){
-            for (int x = 0; x < 10; x++){
-                cout<< are_friends[y][x] ;
-            }
-            cout << endl;
-        }
-        
    
         
-        cout << num_children << endl;
-        
-        cout << num_pairs << endl;
-        
-        
-        cout << countParing(initial,num_children);
+        cout << countParing(initial,num_children) << endl;
     }
     
     
