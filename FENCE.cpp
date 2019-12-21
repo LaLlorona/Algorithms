@@ -9,9 +9,10 @@ Write your code in this editor and press "Run" button to compile and execute it.
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string.h> 
 using namespace std;
 
-vector<int> fence;
+vector<int> fence(20000);
 
 int FindMaximumArea(int left,int right){
     if (left == right){
@@ -36,17 +37,15 @@ int FindMaximumArea(int left,int right){
         }
         
         else if (right == high || fence[low - 1] > fence[high]) {
-                low -= 1;
-                height = min(height, fence[low]);
-                maximum_area_including_middle = max(maximum_area_including_middle, height * (high - low + 1));
-            }
+            low -= 1;
+            height = min(height, fence[low]);
+            maximum_area_including_middle = max(maximum_area_including_middle, height * (high - low + 1));
+        }
         
         else if (left == low || fence[high + 1] > fence[low]) {
             high +=1;
             height = min(height, fence[high]);
             maximum_area_including_middle = max(maximum_area_including_middle, height * (high - low + 1));
-            
-            
         }
     }
     return max(maximum_area_including_middle, max_candidate);
@@ -58,7 +57,21 @@ int FindMaximumArea(int left,int right){
 
 int main()
 {
-    cout<<"Hello World";
+    int num_testcase;
+    int fence_length;
+    int fence_size;
+    cin >> num_testcase;
+    for (int i = 0; i < num_testcase; i++){
+        cin >> fence_length;
+        for (int k = 0; k < 20000; k++){
+            fence[k] = 0;
+        }
+        for (int j = 0; j < fence_length ; j++) {
+            cin >> fence_size;
+            fence[j] = fence_size;
+        }
+        cout << FindMaximumArea(0,fence_length - 1) << endl;
+    }
 
     return 0;
 }
