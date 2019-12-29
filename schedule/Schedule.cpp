@@ -1,0 +1,102 @@
+#include <iostream>
+#include <algorithm>
+#include <string.h>
+using namespace std;
+
+const int INF = 987654321;
+int original_array[101];
+
+int partial_sums[101];
+int partial_square_sum[101];
+int best_index_choice[101][11];
+
+int cache[101][11];
+
+int len_original_array;
+int num_chunk;
+
+
+
+void FillPartialSum() {
+    sort(original_array, original_array + len_original_array);
+    partial_sums[0] = original_array[0];
+    partial_square_sum[0] = original_array[0] * original_array[0];
+    for (int i = 0; i < len_original_array; i++) {
+        partial_sums[i] = partial_sums[i - 1] + original_array[i];
+        partial_square_sum[i] = partial_square_sum[i - 1] + original_array[i] * original_array[i];
+    }
+}
+
+int MinError(int index_from, int index_to) {
+    int sum = partial_sums[index_to] - (index_from == 0 ? 0 : partial_sums[index_from - 1]);
+    int square_sum = partial_square_sum[index_to] - (index_from == 0 ? 0 : partial_square_sum[index_from - 1]);
+    int average = int(0.5 + ((double)sum / (index_to - index_from + 1)));
+    int ret = square_sum - 2 * average * sum + average * average * (index_to - index_from + 1);
+}
+
+int Quantize(int index_quantize_from, int num_leftchunk) {
+    if (index_quantize_from == len_original_array) {
+        return 0;
+    }
+    
+    if (num_leftchunk == 0) {
+        return INF;
+    }
+    
+    int& ret = cache[index_quantize_from][num_leftchunk];
+    
+    if (ret != -1) {
+        return ret;
+    }
+    
+    ret = INF;
+    int index_last_part_of_chunk = -1;
+    
+    for (int size = 1; size + index_quantize_from <= len_original_array; size++) {
+        int cand = MinError(index_quantize_from, index_quantize_from + size - 1) + Quantize(index_quantize_from + size, num_leftchunk - 1);
+        
+        
+        
+        
+        if (cand < ret) {
+            ret = cand;
+            index_last_part_of_chunk = size + index_quantize_from - 1;
+            
+        }
+        
+        
+    }
+    best_index_choice[index_quantize_from][num_leftchunk] = index_last_part_of_chunk;
+    
+    
+    return ret;
+}
+
+
+
+int main()
+{
+    int num_testcase;
+    cin >> num_testcase;
+    for (int i = 0; i < num_testcase; i++) {
+        cin >> len_original_array;
+        cin >> num_chunk;
+        memset(cache,-1,sizeof(cache));
+        memset(best_index_choice, -1, sizeof(cache));
+        for (int j = 0; j < len_original_array; j++) {
+            cin >> original_array[j];
+        }
+        FillPartialSum();
+        cout << Quantize(0, num_chunk) << endl;
+        for (int k = 0; k < 101; k++) {
+            for (int l = 0; l < 11; l++) {
+                
+            }
+            
+        }
+        cout << endl;
+    }
+    
+
+    return 0;
+}
