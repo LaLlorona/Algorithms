@@ -1,10 +1,3 @@
-/******************************************************************************
-
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
 
 #include <iostream>
 
@@ -27,7 +20,8 @@ int Classify(string partition) {
             progression_with_one = false;
             progression = false;
         }
-        if ((partition[1] - partition[0] != 1) || (partition[1] - partition[0] != -1)) {
+        if ((partition[1] - partition[0] != 1) && (partition[1] - partition[0] != -1)) {
+            
             progression_with_one = false;
         }
     }
@@ -64,7 +58,6 @@ int main()
 {
     cout << Classify("333") << endl;
     cout << Classify("23456") << endl;
-   
     cout << Classify("987") << endl;
     cout << Classify("3232") << endl;
     cout << Classify("87878") << endl;
