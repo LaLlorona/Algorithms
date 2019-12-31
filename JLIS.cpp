@@ -6,8 +6,8 @@ using namespace std;
 
 int len_input_array_first;
 int len_input_array_second;
-int input_array_first [100];
-int input_array_second [100];
+int input_array_first[100];
+int input_array_second[100];
 int cache[101][101];
 
 long long NEGINF = numeric_limits<long long>::min();
@@ -15,13 +15,13 @@ long long NEGINF = numeric_limits<long long>::min();
 int JLIS (int index_start_first, int index_start_second) { // returns maximum length of JointLongestIncreasingSubsequence 
     
     
-    int& ret = cache[index_start_first][index_start_second];
+    int& ret = cache[index_start_first + 1][index_start_second + 1];
     
     if (ret != -1) {
         return ret;
     }
     
-    ret = 2;
+    ret = 0;
     
     long long a = (index_start_first == -1 ? NEGINF : input_array_first[index_start_first]);
     long long b = (index_start_second == -1 ? NEGINF : input_array_second[index_start_second]);
@@ -60,12 +60,12 @@ int main()
             cin >> input_array_second[c];
         }
         
-        // for(int m = -1; m < len_input_array_first; m++) {
-        //     for (int n = -1; n < len_input_array_second; n++) {
-        //         length_JLIS = max(length_JLIS, JLIS(m, n));
-        //     }
-        // }
-        length_JLIS = JLIS(-1, -1);
+        for(int m = -1; m < len_input_array_first; m++) {
+            for (int n = -1; n < len_input_array_second; n++) {
+                length_JLIS = max(length_JLIS, JLIS(m, n));
+            }
+        }
+        // length_JLIS = JLIS(-1, -1);
         cout << length_JLIS << endl;
     }
     
