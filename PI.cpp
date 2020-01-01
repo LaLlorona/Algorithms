@@ -1,12 +1,18 @@
-
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
 string original_text;
+int cache[10001];
+const int INF = 987654321;
 
 int Classify(string partition) {
     
+    // difficulty 10 : size is smaller than 3
+    if (partition.size() < 3) {
+        return 10;
+    }
     // difficulty 1
     if (partition == string(partition.size(),partition[0])) {
         return 1;
@@ -40,27 +46,48 @@ int Classify(string partition) {
             alternative = false;
         }
     }
-    
     if (alternative) return 4;
+    
     // difficulty 5
     if (progression) return 5;
-    
-    
+
     // difficulty 10
     return 10;
 }
 
 int TotalDifficulty(int index_start) {
+    if (index_start >= original_text.size()) {
+        return 0;
+    }
+    
+    int& ret = cache[index_start];
+    
+    if (ret != -1) {
+        return ret;
+    }
+    
+    ret = INF;
+    for (int size = 3 ; size < 6; size++ ) {
+        ret = min(ret, TotalDifficulty(index_start + size) + Classify(original_text.substr(index_start,size)));
+    }
+    
+    return ret;
+    
+    
+    
+    
+    
     
 }
 
 int main()
 {
-    cout << Classify("333") << endl;
-    cout << Classify("23456") << endl;
-    cout << Classify("987") << endl;
-    cout << Classify("3232") << endl;
-    cout << Classify("87878") << endl;
-    cout << Classify("147") << endl;
-    cout << Classify("8642") << endl;
+    int num_testcase;
+    cin >> num_testcase;
+    
+    for (int i = 0; i < num_testcase; i++) {
+        cin >> original_text;
+        memset(cache,-1,sizeof(cache));
+        cout << TotalDifficulty(0) << endl;
+    }
 }
