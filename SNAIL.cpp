@@ -4,9 +4,9 @@ using namespace std;
 
 int deadline;
 int standard_point;
-float cache[1001][1001];
+double cache[1001][2002];
 
-float PossibiltyToEscapeAtDayHeight(int height, int day) {
+double PossibiltyToEscapeAtDayHeight(int height, int day) {
     if (height >= standard_point) {
         return 1;
     }
@@ -15,19 +15,21 @@ float PossibiltyToEscapeAtDayHeight(int height, int day) {
         return 0;
     }
     
-    float& ret = cache[day][height];
+    double& ret = cache[day][height];
     
     if (ret != -1) {
         return ret;
     }
     
-    return ret = PossibiltyToEscapeAtDayHeight(day + 1, height + 2) * 0.75 + PossibiltyToEscapeAtDayHeight(day + 1, height + 1) * 0.25;
+    return ret = PossibiltyToEscapeAtDayHeight(height + 2, day + 1) * 0.75 + PossibiltyToEscapeAtDayHeight(height + 1, day + 1) * 0.25;
     
     
 
 }
 int main()
 {
+    cout.precision(11);
+    cout << fixed;
     int num_testcase;
     
     cin >> num_testcase;
@@ -35,7 +37,7 @@ int main()
         cin >> standard_point;
         cin >> deadline;
         for (int j = 0; j < 1001; j++) {
-            for (int k = 0; k < 1001; k++) {
+            for (int k = 0; k < 2002; k++) {
                 cache[j][k] = -1;
             }
         }
