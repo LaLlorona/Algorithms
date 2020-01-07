@@ -19,7 +19,7 @@ int useNum;
 
 //partSquareSum[]:arr[] 제곱의 부분합 저장, partSquareSum[i]는 arr[0]^2+...arr[i]^2의 합
 
-int arr[100], partSum[100], partSquareSum[100], best_index_choice[100];
+int arr[100], partSum[100], partSquareSum[100], best_index_choice[100][100];
 
 int cache[100][10];
 
@@ -115,22 +115,19 @@ int quantize(int from, int parts) //from번째 이후의 숫자들을 parts개�
         }
         
     }
-    best_index_choice[from] = index_last_part_of_chunk;
+    best_index_choice[from][parts] = index_last_part_of_chunk;
     return result;
-        
-
-            
-
+    
 }
 void PrintLastElementEachChunk() {
     int i = 0 ;
     int chunk = useNum;
     cout << arr[i] << endl;
-    while (i < length && chunk > 1) {
+    while (i < length && chunk >= 0) {
         // cout << i << "th element" << endl;
         // cout << best_index_choice[i] << endl;
-        cout << arr[best_index_choice[i]] << endl;
-        i = best_index_choice[i];
+        cout << arr[best_index_choice[i][chunk]] << endl;
+        i = best_index_choice[i][chunk];
         chunk--;
         
     }
@@ -177,9 +174,7 @@ int main(void)
             cout << quantize(0, useNum) << endl << endl;
                
             PrintLastElementEachChunk();
-            // for (int j = 0 ; j < length; j++) {
-            //     cout << best_index_choice[j] << endl;
-            // } 
+            
 
     }
 
