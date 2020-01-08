@@ -133,6 +133,7 @@ void PrintLastElementEachChunk() {
 
 void PrintLastElementEachChunkToTime() {
     int i = 0 ;
+    int actual_time_working = 0;
     int chunk = useNum;
     cout << "optimized start time is" << endl;
     int first_flight_time = arr[i];
@@ -147,6 +148,7 @@ void PrintLastElementEachChunkToTime() {
             end_time = (end_time + begin_time)/2;
             begin_time = end_time;
         }
+        
         
         cout << " ~ " << end_time / 60 << end_time % 60 << endl;
         cout << begin_time / 60 << begin_time % 60;
@@ -189,8 +191,8 @@ int main(void)
     }
     // example input 
     // 1
-    // 46 3
-    // 510 600 555 655 555 655 555 675 565 620 585 660 590 650 595 660 600 680 630 810 660 840 750 855 825 890 840 940 850 910 855 940 860 940 863 940 866 930 890 970 900 970 900 980 990 
+    // 44 3
+    // 510 600 555 655 555 655 555 675 565 620 585 660 590 650 595 660 600 680 630 810 660 840 855 825 890 840 940 850 910 855 940 860 940 863 940 866 930 890 970 900 970 900 980 990 
     return 0;
 
 }
