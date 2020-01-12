@@ -1,3 +1,10 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
 
 #include <iostream>
 #include <math.h>
@@ -34,6 +41,7 @@ bool PossibleToCommunicate(double radio_range) {
         for (int to = 0; to < num_base; to++) {
             if ((base_map[from][to] <= radio_range) && !visited[to]) { // when base to go is closer than radio_range and not visited
                 bfs_queue.push(to);
+                visited[to] = true;
                 num_visited++;
             }
         }
@@ -46,8 +54,10 @@ bool PossibleToCommunicate(double radio_range) {
 double BinarySearch() {
     double low = 0;
     double high = 1001;
-    double mid = (low + high) / 2.0;
+    double mid = 0;
+    
     for (int i = 0; i < 100; i++) {
+        mid = (low + high) / 2.0;
         if (PossibleToCommunicate(mid)) {
             high = mid;
         }
@@ -55,12 +65,13 @@ double BinarySearch() {
             low = mid;
         }
     }
+    return low;
     
 }
 int main()
 {
     int num_testcase;
-    cout.precision(3);
+    cout.precision(2);
     cout << fixed;
     
     cin >> num_testcase;
@@ -70,9 +81,11 @@ int main()
             cin >> x_coordinates[j];
             cin >> y_coordinates[j];
         }
+        PreProcess();
+        cout << BinarySearch() << endl;
     }
     
-    cout << BinarySearch() << endl;
+    
 
     return 0;
 }
