@@ -24,7 +24,7 @@ void decompose(const vector<point>& hull) {
         if (hull[(i + 1) % num_points].x > hull[i].x) { // lower hull
             lower.push_back(make_pair(hull[i], hull[(i + 1) % num_points]));
         }
-        if (hull[(i + 1) % num_points].x < hull[i].x) { // upper hull
+        else if (hull[(i + 1) % num_points].x < hull[i].x) { // upper hull
             upper.push_back(make_pair(hull[i], hull[(i + 1) % num_points]));
         }
     }
@@ -35,7 +35,7 @@ bool IsXBetweenSegment(double x, pair<point, point> segment) {
     return (segment.first.x <= x && segment.second.x >= x) || (segment.second.x <= x && segment.first.x >= x);
 }
 
-double XMeetSementAt(double x, pair<point, point> segment) {
+double XMeetSegmentAt(double x, pair<point, point> segment) {
     point first = segment.first;
     point second = segment.second;
     return first.y + (second.y - first.y) * (x - first.x) / (second.x - first.x);
@@ -46,13 +46,13 @@ double vertical(double x) {
     double maximum_lower = -1e20;
     for (int i = 0; i < upper.size(); i++) {
         if (IsXBetweenSegment(x, upper[i])) {
-            minimum_upper = min(minimum_upper,XMeetSementAt(x,upper[i]));
+            minimum_upper = min(minimum_upper,XMeetSegmentAt(x,upper[i]));
         }
     }
     
     for (int i = 0; i < lower.size(); i++) {
         if (IsXBetweenSegment(x, lower[i])) {
-            maximum_lower = max(maximum_lower,XMeetSementAt(x,lower[i]));
+            maximum_lower = max(maximum_lower,XMeetSegmentAt(x,lower[i]));
         }
     }
     return minimum_upper - maximum_lower;
@@ -76,12 +76,12 @@ double TrisectionSearch() {
     double hi = min(MaxX(hull1), MaxX(hull2));
     
     if (hi < lo) {
-        return 0;
+        return 0.0;
     }
     
     for (int iter = 0; iter < 100; iter++) {
         double aab = (lo * 2 + hi) /3.0;
-        double abb = (lo * 2 + hi) /3.0;
+        double abb = (lo + hi * 2) /3.0;
         
         if (vertical(aab) < vertical(abb)) {
             lo = aab;
@@ -95,6 +95,9 @@ double TrisectionSearch() {
 }
 int main()
 {
+    cout.precision(10);
+    cout << fixed;
+    
     int num_testcase;
     double x;
     double y;
@@ -119,6 +122,7 @@ int main()
         decompose(hull1);
         decompose(hull2);
         cout << TrisectionSearch() << endl;
+        
     }
     
 
