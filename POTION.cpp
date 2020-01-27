@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -29,7 +28,7 @@ void calculateLeft() {
     int denom = ceil(gcd_recipe * maximum_ratio_denom / (double)maximum_ratio_numer);
     
     for (int i =0; i < num_recipe; i++) {
-        amount_more[i] = amount_put[i] * denom / gcd_recipe - amount_put[i];
+        amount_more[i] = amount_recipe[i] * denom / gcd_recipe - amount_put[i];
     }
     
 }
