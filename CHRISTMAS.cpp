@@ -1,3 +1,4 @@
+  
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,14 +8,13 @@ using namespace std;
 
 int num_box;
 int num_children;
-int dolls[100001], partialsum[100002], cache[100002], prevcache[100002];
+int dolls[100001], partialsum[100002];
 
 void fillPartialSum() {
     partialsum[0] = 0;
-    partialsum[1] = dolls[0] % num_children; 
     
-    for (int i = 1; i < num_box; i++) {
-        partialsum[i + 1] = (partialsum[i] + dolls[i]) % num_children;
+    for (int i = 1; i < num_box + 1; i++) {
+        partialsum[i] = (partialsum[i - 1] + dolls[i - 1]) % num_children;
     }
 }
 long long calculateOneOrder() {
@@ -25,7 +25,7 @@ long long calculateOneOrder() {
     }
     for (int i = 0; i < num_children; i++) {
         if (have_seen[i] >= 2) {
-            ret += (have_seen[i] * (have_seen[i] - 1) / 2) % 20091101;
+            ret = (ret +(have_seen[i] * (have_seen[i] - 1) / 2)) % 20091101;
         }
     }
     return ret;
