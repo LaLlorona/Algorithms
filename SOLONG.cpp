@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <utility>
+#include <algorithm>
 
 using namespace std;
 
@@ -75,7 +77,7 @@ struct TrieNode {
   
 };
 
-int countKeys(TrieNode* trie, const char* word) {
+int countKeys(TrieNode* trie, char* word) {
     TrieNode* cand = trie->find(word);
     if (cand == NULL || cand->terminal == -1) {
         return strlen(word);
@@ -84,11 +86,43 @@ int countKeys(TrieNode* trie, const char* word) {
 }
 
 TrieNode* readInput(int words) { // this part should be implemented 
-    
+    vector<pair<int, string> > input;
+    for (int i = 0; i < words; i++) {
+        char buf[11];
+        int freq;
+        scanf("%s %d", buf, &freq);
+        input.push_back(make_pair(-freq, buf));
+    }
+    sort(input.begin(), input.end());
+    TrieNode* trie = new TrieNode();
+    for (int i = 0; i < input.size(); i++) {
+        trie->insert(input[i].second.c_str(), i);
+    }
+    trie->first = -1;
+    return trie;
 }
 int main()
 {
-  cout<<"Hello World";
+  int num_testcase;
+  int num_words_total;
+  int num_words_dict;
+  
+  int types;
+  char* word;
+  
+  cin >> num_testcase;
+  for (int i = 0; i < num_testcase; i++) {
+      cin >> num_words_dict;
+      cin >> num_words_total;
+      types = 0;
+      TrieNode* root = readInput(num_words_dict);
+      for (int j = 0; j < num_words_total; j++) {
+          cin >> word;
+          types += countKeys(root, word);
+      }
+      cout << types << endl;
+      
+  }
 
   return 0;
 }
