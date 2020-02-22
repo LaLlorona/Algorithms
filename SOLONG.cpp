@@ -47,7 +47,7 @@ struct TrieNode {
         }
     
     }
-    TrieNode* find(char* key) {
+    TrieNode* find(const char* key) {
         if (*key == 0) {
             return this;
         }
@@ -77,12 +77,12 @@ struct TrieNode {
   
 };
 
-int countKeys(TrieNode* trie, char* word) {
+int countKeys(TrieNode* trie, const char* word) {
     TrieNode* cand = trie->find(word);
     if (cand == NULL || cand->terminal == -1) {
         return strlen(word);
     }
-    return trie->type(word, cand -> terminal);
+    return trie->type(word, cand->terminal);
 }
 
 TrieNode* readInput(int words) { // this part should be implemented 
@@ -108,7 +108,8 @@ int main()
   int num_words_dict;
   
   int types;
-  char* word;
+  string word_string;
+  const char* word;
   
   cin >> num_testcase;
   for (int i = 0; i < num_testcase; i++) {
@@ -117,7 +118,8 @@ int main()
       types = 0;
       TrieNode* root = readInput(num_words_dict);
       for (int j = 0; j < num_words_total; j++) {
-          cin >> word;
+          cin >> word_string;
+          word = word_string.c_str();
           types += countKeys(root, word);
       }
       cout << types << endl;
