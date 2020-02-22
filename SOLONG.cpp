@@ -15,7 +15,7 @@ struct TrieNode {
   
     int terminal;
     int first;
-    TrieNode() : terminal(-1) {
+    TrieNode() : terminal(-1), first(-1) {
         memset(children, 0, sizeof(children));
       
     }
@@ -122,6 +122,7 @@ int main()
           word = word_string.c_str();
           types += countKeys(root, word);
       }
+      types += num_words_total - 1;
       cout << types << endl;
       
   }
