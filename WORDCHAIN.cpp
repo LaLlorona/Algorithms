@@ -38,7 +38,7 @@ void MakeGraph(vector<string>& words) {
 
 
 void GetEulerCircuit(int here, vector<int>& circuit) { // find circuit that goes through every EDGES of the graph
-    for (int there = 0; there < 26; there++) {
+    for (int there = 0; there < adjacent.size(); there++) {
         while (adjacent[here][there] > 0) {
             adjacent[here][there]--;
             GetEulerCircuit(there, circuit);
@@ -119,11 +119,12 @@ int main()
         cin >> num_words;
         vector<string> given_words;
         string word_testcase;
-        for (int j = 0; i < num_words; j++) {
+        for (int j = 0; j < num_words; j++) {
             cin >> word_testcase;
             given_words.push_back(word_testcase);
         }
-        solve(given_words);
+        cout << solve(given_words) << endl;
+        
     }
 
     return 0;
