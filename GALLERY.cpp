@@ -14,8 +14,6 @@ vector<vector<int> > gallery;
 
 int num_total_camera;
 
-
-
 int DepthFirstSearch(int here) { // return state of 'here'
     visited[here] = true;
     int children_status[3] = {0, 0, 0};
@@ -31,11 +29,13 @@ int DepthFirstSearch(int here) { // return state of 'here'
         return INSTALLED;
     }
     
-    if (children_status[WATCHED]) { // when all of its children is WATCHED
+    if (children_status[INSTALLED]) { // when all of its children is WATCHED
         return WATCHED;
     }
+    
     return UNWATCHED;
 }
+
 int InstallCamera() {
     num_total_camera = 0;
     for (int i = 0; i < num_gallery; i++) {
