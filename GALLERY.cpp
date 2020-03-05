@@ -1,70 +1,83 @@
 #include <iostream>
 #include <vector>
+#include <utility>
+#include <queue>
 
 using namespace std;
 
-int UNWATCHED = 0; // when the node is not WATCHED
-int WATCHED = 1; // Eventhough camera is not INSTALLED in this node, this node is WATCHED because adjacent to the INSTALLED node
-int INSTALLED = 2; // camera is INSTALLED
+vector<pair<double, int> >  graph[10001]; // int : adjacent vertex index, double: weight between current vertex 
+double weights[10001];
 
-int num_gallery;
-int num_hallway;
-vector<bool> visited;
-vector<vector<int> > gallery;
+double INF = 1e300;
 
-int num_total_camera;
+int num_computer;
+int num_edge;
 
-int DepthFirstSearch(int here) { // return state of 'here'
-    visited[here] = true;
-    int children_status[3] = {0, 0, 0};
-    for (int i = 0; i < gallery[here].size(); i++) {
-        int there = gallery[here][i];
-        if (!visited[there]) {
-            ++children_status[DepthFirstSearch(there)];
+double Dijkstra(int start) {
+    priority_queue<pair<double, int>, vector<pair<double, int> >,greater<pair<double, int> > > pq;
+    pq.push(make_pair(1.0, start));
+    weights[start] = 1.0;
+    while (!pq.empty()) {
+        int current_vertex = pq.top().second;
+        cout << "vertex is " << current_vertex ;
+        
+        double current_weight = pq.top().first;
+        cout << " and its weight is " << current_weight << endl;
+        pq.pop();
+        if (weights[current_vertex] < current_weight) {
+            cout << "ignored\n";
+            continue;
+        }
+        else{
+            weights[current_vertex] = current_weight;
+        }
+        for (int i = 0; i < graph[current_vertex].size(); i++) {
+            int adjacent_vertex = graph[current_vertex][i].second;
+            double weight_between = graph[current_vertex][i].first;
+            cout << "weight between " << i << " and " << adjacent_vertex << " is " << weight_between << endl;
+           
+            if (weights[current_vertex] * weight_between < weights[adjacent_vertex]) {
+                weights[adjacent_vertex] = weights[current_vertex] * weight_between;
+                cout << "adjacent_vertex is " << adjacent_vertex;
+                cout << " and its weight is  " << weights[adjacent_vertex] << endl;
+                
+                pq.push(make_pair(weights[adjacent_vertex], adjacent_vertex));
+                
+            }
+            
         }
     }
+    return weights[num_computer - 1];
     
-    if (children_status[UNWATCHED]) {
-        num_total_camera++;
-        return INSTALLED;
-    }
-    
-    if (children_status[INSTALLED]) { // when all of its children is WATCHED
-        return WATCHED;
-    }
-    
-    return UNWATCHED;
 }
 
-int InstallCamera() {
-    num_total_camera = 0;
-    for (int i = 0; i < num_gallery; i++) {
-        if(!visited[i] && DepthFirstSearch(i) == UNWATCHED) {
-            num_total_camera++;
-        }
-    }
-    return num_total_camera;
-}
 int main()
 {
     int num_testcase;
     cin >> num_testcase;
     for (int i = 0; i < num_testcase; i++) {
-        cin >> num_gallery;
-        cin >> num_hallway;
-        gallery = vector<vector<int> > (num_gallery, vector<int>(0));
-        visited = vector<bool> (num_gallery, false);
-        int first, second;
-        for (int j = 0; j < num_hallway; j++) {
-            cin >> first;
-            cin >> second;
-            gallery[first].push_back(second);
-            gallery[second].push_back(first);
+        cin >> num_computer;
+        cin >> num_edge;
+        int vertex1;
+        int vertex2;
+        double weight;
+        for (int k = 0; k < 10001; k++) {
+            graph[k].clear();
         }
-        cout << InstallCamera() << endl;
+        for (int k = 0; k < num_computer; k++) {
+            weights[k] = INF;
+        }
+        for (int j = 0; j < num_edge; j++) {
+            cin >> vertex1;
+            cin >> vertex2;
+            cin >> weight;
+            graph[vertex1].push_back(make_pair(weight, vertex2));
+            graph[vertex2].push_back(make_pair(weight, vertex1));
+        }
+        cout << Dijkstra(0);
+        
+        
     }
-    
-    
 
     return 0;
 }
