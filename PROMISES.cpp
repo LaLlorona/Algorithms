@@ -26,12 +26,12 @@ void floyd() {
 bool update(int a, int b, int weight) {
     if (graph[a][b] <= weight) {
         return false;
-    }
     for (int from = 0; from < num_city; from++) {
         for (int to = 0; to < num_city; to++) {
             graph[from][to] = min(graph[from][to], min(graph[from][a] + weight + graph[b][to], graph[from][b] + weight + graph[a][to] ));
         }
     }
+    useless++;
     return true;
 }
 
@@ -64,9 +64,7 @@ int main()
             cin >> from;
             cin >> to;
             cin >> weight;
-            if (!update(from, to , weight)){
-                useless++;
-            }
+            update(from, to , weight);
         }
         
         cout << useless << endl;
