@@ -11,26 +11,26 @@ const int INF = 987654321;
 
 int num_edge;
 int num_vertex;
-int weight_between[MAX_VERTEX][MAX_VERTEX];
-int minus_weight_between[MAX_VERTEX][MAX_VERTEX];
+bool weight_between[MAX_VERTEX][MAX_VERTEX];
+bool minus_weight_between[MAX_VERTEX][MAX_VERTEX];
 vector<pair<int, int> > graph[MAX_VERTEX]; // graph[i] : adjacent list for (adjacent vertex, weight)
 vector<pair<int, int> > minus_graph[MAX_VERTEX];
 
 
-void found_reachable(int weight_between[][MAX_VERTEX]) {
+void found_reachable(bool weight_between[][MAX_VERTEX]) {
     for (int i  = 0; i < MAX_VERTEX; i++) {
-        weight_between[i][i] = 0;
+        weight_between[i][i] = true;
     }
     for (int k = 0; k < MAX_VERTEX; k++) {
         for (int i = 0; i < MAX_VERTEX; i++) {
             for (int j = 0; j < MAX_VERTEX; j++) {
-                weight_between[i][j] = min (weight_between[i][j], weight_between[i][k] + weight_between[k][j]);
+                weight_between[i][j] = weight_between[i][j]||(weight_between[i][k] && weight_between[k][j]);
             }
         }
     }
 }
 
-int bellmanFord(int src, vector<pair<int, int> > (&graph)[MAX_VERTEX], int weight_between[][MAX_VERTEX]) {
+int bellmanFord(int src, vector<pair<int, int> > (&graph)[MAX_VERTEX], bool weight_between[][MAX_VERTEX]) {
     vector<int> upper(MAX_VERTEX, INF);
     upper[src] = 0;
     bool updated;
@@ -51,7 +51,7 @@ int bellmanFord(int src, vector<pair<int, int> > (&graph)[MAX_VERTEX], int weigh
             int cost = graph[here][i].second;
             if (upper[there] > upper[here] + cost) { // negative cycle exists
               
-                if ((weight_between[src][here] < INF - 10000000) && (weight_between[here][1] < INF - 10000000)) { // if it is reachable, return INFINITY
+                if ((weight_between[src][here]) && (weight_between[here][1])) { // if it is reachable, return INFINITY
                     return -INF;
                 }
             }
@@ -72,8 +72,8 @@ int main()
         }
         for (int k = 0; k < MAX_VERTEX; k++) {
             for (int l = 0; l < MAX_VERTEX; l++) {
-                weight_between[k][l] = INF;
-                minus_weight_between[k][l] = INF;
+                weight_between[k][l] = false;
+                minus_weight_between[k][l] = false;
             }
         }
         int first;
@@ -89,14 +89,14 @@ int main()
             minus_graph[first].push_back(make_pair(second, -weight));
             
             
-            weight_between[first][second] = weight;
+            weight_between[first][second] = true;
             
             
-            minus_weight_between[first][second] = -weight;
+            minus_weight_between[first][second] = true;
             
         }
         found_reachable(weight_between);
-        if (weight_between[0][1] == INF) {
+        if (weight_between[0][1] == false) {
             cout << "UNREACHABLE" << endl;
         }
         else{
