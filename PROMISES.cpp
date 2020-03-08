@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <algorithm>
 
@@ -25,7 +24,7 @@ void floyd() {
 void update(int a, int b, int weight) {
     for (int from = 0; from < num_city; from++) {
         for (int to = 0; to < num_city; to++) {
-            graph[from][to] = min(graph[from][to], graph[from][a] + weight + graph[b][to], graph[from][b] + weight + graph[a][to] );
+            graph[from][to] = min(graph[from][to], min(graph[from][a] + weight + graph[b][to], graph[from][b] + weight + graph[a][to] ));
         }
     }
 }
@@ -46,7 +45,7 @@ int main()
             cin >> from;
             cin >> to;
             cin >> weight;
-            graph[from][to] = weigth;
+            graph[from][to] = weight;
             graph[to][from] = weight;
         }
         floyd();
@@ -59,10 +58,11 @@ int main()
             }
             update(from, to, weight);
         }
+        
         cout << useless << endl;
         
     }
-    cout<<"Hello World";
+    
 
     return 0;
 }
