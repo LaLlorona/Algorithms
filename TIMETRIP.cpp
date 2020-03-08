@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <utility>
@@ -51,8 +50,8 @@ int bellmanFord(int src, vector<pair<int, int> > (&graph)[MAX_VERTEX], int weigh
             int there = graph[here][i].first;
             int cost = graph[here][i].second;
             if (upper[there] > upper[here] + cost) { // negative cycle exists
-                
-                if ((weight_between[src][here] != INF) && (weight_between[here][1] != INF)) { // if it is reachable, return INFINITY
+              
+                if ((weight_between[src][here] < INF - 10000000) && (weight_between[here][1] < INF - 10000000)) { // if it is reachable, return INFINITY
                     return -INF;
                 }
             }
@@ -119,11 +118,7 @@ int main()
             
             
         }
-        
-        
-        
-        
-        
+
     }
     
 
