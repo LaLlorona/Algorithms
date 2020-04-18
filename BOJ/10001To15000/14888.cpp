@@ -10,10 +10,7 @@ stack<int> mid_result;
 const int INF = 1987654321;
 int min_cand;
 int max_cand;
-void PreProcess() {
-	
-	
-}
+
 void UpdateMinMax(int num_used_operators) {
 	if (num_used_operators == n - 1) {
 		int ret = mid_result.top();
@@ -25,68 +22,32 @@ void UpdateMinMax(int num_used_operators) {
 			int first_num;
 			int second_num;
 			if (left_operators[i] > 0) {
+				first_num = mid_result.top();
+				mid_result.pop();
+				second_num = mid_result.top();
+				mid_result.pop();
 				if (i == 0) {
-					first_num = mid_result.top();
-					mid_result.pop();
-					second_num = mid_result.top();
-					mid_result.pop();
 					mid_result.push(first_num + second_num);
-					left_operators[i]--;
-					UpdateMinMax(num_used_operators + 1);
-					
-					mid_result.pop();
-					mid_result.push(second_num);
-					mid_result.push(first_num);
-					left_operators[i]++;
 				}
 				if (i == 1) {
-					first_num = mid_result.top();
-					mid_result.pop();
-					second_num = mid_result.top();
-					mid_result.pop();
 					mid_result.push(first_num - second_num);
-					left_operators[i]--;
-					UpdateMinMax(num_used_operators + 1);
-					
-					mid_result.pop();
-					mid_result.push(second_num);
-					mid_result.push(first_num);
-					left_operators[i]++;
 				}
 				if (i == 2) {
-					first_num = mid_result.top();
-					mid_result.pop();
-					second_num = mid_result.top();
-					mid_result.pop();
 					mid_result.push(first_num * second_num);
-					left_operators[i]--;
-					UpdateMinMax(num_used_operators + 1);
-					
-					mid_result.pop();
-					mid_result.push(second_num);
-					mid_result.push(first_num);
-					left_operators[i]++;
 				}
-				
 				if (i == 3) {
-					first_num = mid_result.top();
-					mid_result.pop();
-					second_num = mid_result.top();
-					mid_result.pop();
 					mid_result.push(first_num / second_num);
-					left_operators[i]--;
-					UpdateMinMax(num_used_operators + 1);
-					
-					mid_result.pop();
-					mid_result.push(second_num);
-					mid_result.push(first_num);
-					left_operators[i]++;
 				}
-			
+				left_operators[i]--;
+				UpdateMinMax(num_used_operators + 1);
+					
+				mid_result.pop();
+				mid_result.push(second_num);
+				mid_result.push(first_num);
+				left_operators[i]++;
 			}
 		}
 	}
-	
 }
 
 
@@ -97,9 +58,9 @@ int main()
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
 	
-// 	std::ifstream in("in.txt");
-//     std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-//     std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	std::ifstream in("in.txt");
+    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+    std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
 	
 	
 	while (cin >> n) {
@@ -119,7 +80,6 @@ int main()
 		}
 		min_cand = INF;
 		max_cand = -INF;
-		
 		
 		for (int i = 0; i < 4; i++) {
 			cin >> left_operators[i];
