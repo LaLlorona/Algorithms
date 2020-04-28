@@ -53,7 +53,7 @@ long long Solve() {
 	}
 	
 	sort(possible_distances.begin(), possible_distances.end());
-	for (int i = 0; i < possible_distances.size(); i++) {
+	for (int i = 0; i < possible_distances.size() - 1; i++) {
 		possible_distances[i + 1] += possible_distances[i];
 	}
 
@@ -61,7 +61,7 @@ long long Solve() {
 	BFS(b, distance_from_b);
 	BFS(c, distance_from_c);
 	
-	long long  min_cand = 1e11;
+	long long  min_cand = 1e18;
 	
 	for (int i = 0; i < num_vertex; i++) {
 		long long total_length = distance_from_a[i] + distance_from_b[i] + distance_from_c[i];
@@ -82,9 +82,9 @@ int main()
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
 	
-// 	std::ifstream in("in.txt");
-//     std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-//     std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	// std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
 	int num_testcase;
 	cin >> num_testcase;
 	while (num_testcase--) {
