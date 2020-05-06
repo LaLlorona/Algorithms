@@ -33,7 +33,7 @@ void Merge(int arr[], int lo, int mid, int hi) {
 	//arr = merged;
 }
 
-void MergeSort(int arr[], int lo, int hi) {
+void MergeSort(int arr[], int lo, int hi) {//left+ division 
 	int mid = lo + (hi - lo) / 2;
 	
 	if (hi > lo) {
