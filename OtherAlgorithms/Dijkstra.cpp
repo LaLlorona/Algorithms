@@ -12,7 +12,7 @@ vector<int> Dijkstra(int src) {
 	vector<int> dist(num_vertice, INF);
 	dist[src] = 0; 
 	priority_queue<pair<int, int>, vector<pair<int ,int > >, greater<pair<int ,int > > > pq;
-	pq.push(make_pair(0, src));
+	pq.push({0, src});
 	while(!pq.empty()) {
 		int closest = pq.top().second;
 		int weight_closest = pq.top().first;
