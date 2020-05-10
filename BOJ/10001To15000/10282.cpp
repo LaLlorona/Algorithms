@@ -8,8 +8,8 @@ int num_edge;
 int start_point;
 int end_point;
 const int INF = 987654321;
-vector<pair<int, int> > graph[1001];
-int parent[1001];
+vector<pair<int, int> > graph[10001];
+
 
 
 vector<int> Dijkstra(int src) {
@@ -28,13 +28,9 @@ vector<int> Dijkstra(int src) {
 		for (int i = 0; i < graph[closest].size(); i++) {
 			int next = graph[closest][i].second;
 			int distance_next = graph[closest][i].first + dist[closest];
-			if (graph[closest][i].first == -1) {
-				continue;
-			}
 			if (dist[next] > distance_next) {
 				dist[next] = distance_next;
 				pq.push({distance_next, next});
-				parent[next] = closest;
 			}
 			
 			
@@ -54,32 +50,36 @@ int main()
 	// std::ifstream in("in.txt");
 	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
 	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
-	while (cin >> num_vertice >> num_edge) {
+	int num_testcase;
+	cin >> num_testcase;
+	while (num_testcase--) {
 		
+		cin >> num_vertice >> num_edge >> start_point;
+		--start_point;
 		
-		
-		for (int i = 0; i < 1001; i++) {
+		for (int i = 0; i < 10001; i++) {
 			graph[i].clear();
 		}
-		memset(parent, -1, sizeof(parent));
+		
 		for (int i = 0; i < num_edge; i++) {
 			int from;
 			int to;
 			int weight;
-			cin >> from >> to >> weight;
+			cin >> to >> from >> weight;
 			from--;
 			to--;
 			graph[from].push_back({weight, to});
-			graph[to].push_back({weight, from});
 		}
-		
-		Dijkstra(0);
-		cout << num_vertice - 1 << "\n";
-		for (int i = 1; i < num_vertice; i++) {
-			cout << i + 1 << " " << parent[i] + 1 << "\n";
+		vector<int> distance_from = Dijkstra(start_point);
+		int max_cand = 0 ;
+		int num_affected_pc = 0;
+		for (int i = 0; i < distance_from.size(); i++) {
+			if (distance_from[i] != INF) {
+				max_cand = max(max_cand, distance_from[i]);
+				++num_affected_pc;
+			} 
 		}
-		
-		
+		cout << num_affected_pc << " " << max_cand << "\n";
 	}
     
 
