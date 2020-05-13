@@ -38,6 +38,7 @@ int main()
 	// std::ifstream in("in.txt");
 	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
 	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	freopen("in.txt","r",stdin);
 	int num_testcase;
 	cin >> num_testcase;
 	while (num_testcase--) {
