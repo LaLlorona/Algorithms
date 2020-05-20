@@ -24,7 +24,7 @@ void CoverBoard(int pos) {
 		//cout << "paper used is " << used << "\n";
 		min_use = min(min_use, 25 - left);
 	}
-	if (25 - left >= min_use) {
+	else if (25 - left > min_use) {
 		return;
 	}
 	
