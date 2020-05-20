@@ -1,6 +1,5 @@
-//#include <bits/stdc++.h>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 
 using namespace std;
 const int  n = 10;
@@ -15,15 +14,21 @@ bool IsInBound(int y, int x) {
 
 void CoverBoard(int pos) {
 	//cout << pos << " ";
+	int left = 0;
+	for (int i = 0; i < 5; i++) {
+		left += papers[i];
+	}
 	if (pos == n * n) {
 		//cout << "reached!!\n";
-		int used = 0;
-		for (int i = 0; i < 5; i++) {
-			used += papers[i];
-		}
+		
 		//cout << "paper used is " << used << "\n";
-		min_use = min(min_use, 25 - used);
+		min_use = min(min_use, 25 - left);
 	}
+	if (25 - left >= min_use) {
+		return;
+	}
+	
+	
 	else {
 		int y = pos / n;
 		int x = pos % n;
@@ -31,7 +36,7 @@ void CoverBoard(int pos) {
 			CoverBoard(pos + 1);
 		}
 		else{
-			for (int size = 1; size <= 5; size++) {
+			for (int size = 5; size >= 1; size--) {
 				if (papers[size - 1] == 0) {
 					continue;
 				}
@@ -44,7 +49,7 @@ void CoverBoard(int pos) {
 					}
 				}
 				if (!possible_cover) {
-					continue;			
+					continue;
 				}
 				//cout << "covered!!!\n";
 				for (int cover_y = y; cover_y < y + size; cover_y++) {
@@ -71,7 +76,11 @@ int main() {
 	std::ios_base::sync_with_stdio(false); 
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
-	while (true) {
+	
+	// std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	
 		min_use = INF;
 		for (int i = 0; i < 5; i++) {
 			papers[i] = 5;
@@ -89,7 +98,7 @@ int main() {
 		else {
 			cout << min_use << "\n";
 		}
-	}
+	
 	
 	
 	return 0;
