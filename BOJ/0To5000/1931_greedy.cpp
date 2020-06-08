@@ -13,6 +13,8 @@
 using namespace std;
 
 int num_meeting;
+int max_meeting[100002]; //saves maximum number of meeting when considering ith meeting
+int before[100002]; // when choosing ith meeting, before[i] is the time where we can select the meeting that does not overlapping
 vector<pair <int, int> > schedule; // saves shedule. first : ending time, second: begin time
 
 
@@ -45,13 +47,18 @@ int main()
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
 	
-	// std::ifstream in("in.txt");
-	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	
 	int begin_time;
 	int end_time;
 	while (cin >> num_meeting) {
-	
+		schedule.clear();
+		for (int i = 0; i < num_meeting; i++) {
+			cin >> begin_time >> end_time;
+			schedule.push_back(make_pair(end_time, begin_time));
+		}
+		sort(schedule.begin(), schedule.end(), compair);
+		cout << FindMaximumMeeting() << "\n";
+		
 		
 		
 		
