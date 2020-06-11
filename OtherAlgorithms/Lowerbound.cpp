@@ -1,8 +1,8 @@
-//#include <bits/stdc++.h>
-#include <iostream>
+#include <bits/stdc++.h>
+//#include <iostream>
 
 using namespace std;
-int arr[10] = {1,2,2,3,3,4,4,5,5,78};
+vector<int> LIS;
 int LowerBound(int from, int to, int target) {
 	int lo = from;
 	int hi = to;
@@ -10,7 +10,7 @@ int LowerBound(int from, int to, int target) {
 	int ret = hi;
 	while (lo <= hi) {
 		int mid = (lo + hi) / 2;
-		if (arr[mid] >= target) {
+		if (LIS[mid] >= target) {
 			ret = mid;
 			hi = mid - 1;
 		}
