@@ -74,7 +74,6 @@ int main()
 	int n;
 	cin >> n;
 	MakeOne(n);
-	PrintPath(n);
     return 0;
 }
 
