@@ -73,7 +73,8 @@ int main()
 	
 	int n;
 	cin >> n;
-	MakeOne(n);
+	cout << MakeOne(n) << "\n";
+	
 	PrintPath(n);
     return 0;
 }
