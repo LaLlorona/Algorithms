@@ -73,7 +73,7 @@ int main()
 	
 	int n;
 	cin >> n;
-	MakeOne(n);
+	cout << MakeOne(n);
     return 0;
 }
 
