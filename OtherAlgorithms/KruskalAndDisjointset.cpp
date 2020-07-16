@@ -10,8 +10,8 @@ vector<pii> connected;
 bool visited[1001];
 double coordinate[1001][2];
 struct DisjointSet {
-	vector<int> parent, rank;
-	DisjointSet(int n) : parent(n), rank(n ,1) {
+	vector<int> parent, rank, elements;
+	DisjointSet(int n) : parent(n), rank(n ,1), elements(n, 1) {
 		for (int i = 0; i < n; i++) {
 			parent[i] = i;
 		}
@@ -22,6 +22,13 @@ struct DisjointSet {
 		}
 		return parent[u] = find(parent[u]);
 	}
+	int find_num(int u) {
+		if (parent[u] == u) {
+			return elements[u];
+		}
+		
+		return elements[u] = find_num(parent[u]);
+	}
 	void merge(int u, int v) {
 		int root_u = find(u);
 		int root_v = find(v);
@@ -31,6 +38,10 @@ struct DisjointSet {
 		if (rank[root_u] > rank[root_v]) {
 			swap(root_u, root_v);
 		}
+		int elements_in_first_tree = elements[root_u];
+		int elements_in_second_tree = elements[root_v];
+		elements[root_u] = elements_in_first_tree + elements_in_second_tree;
+		elements[root_v] = elements[root_u];
 		parent[root_u] = root_v;
 		if (rank[root_u] == rank[root_v]) {
 			rank[root_v]++;
