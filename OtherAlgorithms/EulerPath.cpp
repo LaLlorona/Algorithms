@@ -64,9 +64,9 @@ int main()
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
 	
-	std::ifstream in("in.txt");
-    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-    std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	//std::ifstream in("in.txt");
+    	//std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+    	//std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
 	
 	while (cin >> num_tickets >> num_city) {
 		place_to_num.clear();
