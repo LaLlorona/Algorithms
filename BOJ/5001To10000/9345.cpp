@@ -2,52 +2,15 @@
 
 
 using namespace std;
-typedef long long ll;
 
-vector<ll> input_arr;
-vector<ll> tree;
 
-ll num_input;
-ll num_change;
-ll num_query;
+vector<int> input_arr;
+vector<int> max_tree;
+vector<int> min_tree;
 
-ll init (vector<ll> &input_arr, vector<ll> &tree, ll node, ll start, ll end) { // when the node deals with sum from start to end
-	if (start == end) {
-		return tree[node] = input_arr[start];
-	}
-	else {
-		ll mid = (start + end) / 2;
-		return tree[node] = init(input_arr, tree, 2 * node, start, mid) + init(input_arr, tree, 2 * node + 1, mid + 1, end);
-	}
-}
-
-ll sum(vector<ll> &tree, ll node, ll start, ll end, ll left, ll right) {//when node covers start to end, and we want to calculate sum from left to right 
-	if (end < left || right < start) {
-		return 0;
-	}
-	else if (left <= start && end <= right) {
-		return tree[node];
-	}
-	else {
-		ll mid = (start + end) / 2;
-		return sum(tree, node * 2, start, mid, left, right) + sum(tree, node * 2 + 1, mid + 1, end, left, right);
-	}
-}
-
-ll update(vector<ll> &tree, ll node, ll start, ll end, ll index, ll diff) {//when node covers start to end, we want to change indexth item 
-	if (index < start || end < index) {
-		return tree[node];
-	}
-	
-	else if (start == end) { // when the node is leaf node
-		return tree[node] += diff;
-	}
-	else { // when this node is not leaf node 
-		ll mid = (start + end) / 2;
-		return tree[node] = update(tree, node * 2, start, mid, index, diff) + update(tree, node * 2 + 1, mid + 1, end, index, diff);
-	}
-	
-}
+const int INF = 1987654321;
+int num_input;
+int num_query;
 
 int InitMax (vector<int> &input_arr, vector<int> &tree, int node, int start, int end) { // when the node deals with sum from start to end
 	if (start == end) {
@@ -136,33 +99,57 @@ int main()
 	// std::ifstream in("in.txt");
 	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
 	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
-	while (cin >> num_input >> num_query) {
+	int num_testcase;
+	cin >> num_testcase;
+	while (num_testcase--) {
+		cin >> num_input >> num_query;
 		input_arr.clear();
-		for (ll i = 0; i < num_input; i++) {
-			ll num;
-			cin >> num;
-			input_arr.push_back(num);
+		max_tree.clear();
+		min_tree.clear();
+		
+		input_arr.resize(num_input);
+		max_tree.resize(num_input * 4);
+		min_tree.resize(num_input * 4);
+		
+		for (int i = 0; i < num_input; i++) {
+			input_arr[i] = i;
 		}
-		tree.resize(4 * num_input);
-		init(input_arr, tree, 1, 0, num_input - 1);
-		//cout << tree[1] << "\n";
-		for (ll i = 0; i < num_query; i++) {
-			ll a, b, c, d;
-			cin >> a >> b >> c >> d;
-			if (a > b) {
-				swap(a, b);
-			}
-			cout << sum(tree, 1, 0, num_input - 1, a - 1, b - 1) << "\n";
-			c--;
-			long long diff = d - input_arr[c];
-			input_arr[c] = d;
-			update(tree, 1, 0, num_input - 1, c, diff);
+		InitMax(input_arr, max_tree, 1, 0, num_input - 1);
+		InitMin(input_arr, min_tree, 1, 0, num_input - 1);
+		
+		for (int i = 0; i < num_query; i++) {
+			int question, from, to;
+			cin >> question >> from >> to;
+			if (question == 0){ // change from and to
+				int initial_from = input_arr[from];
+				int initial_to = input_arr[to];
+				input_arr[from] = initial_to;
+				input_arr[to] = initial_from;
+				UpdateMin(min_tree, 1, 0 , num_input - 1, from, initial_to);
+				UpdateMin(min_tree, 1, 0 , num_input - 1, to, initial_from);
+				UpdateMax(max_tree, 1, 0 , num_input - 1, from, initial_to);
+				UpdateMax(max_tree, 1, 0 , num_input - 1, to, initial_from);
+				
 			
+			}
+			else {
+				int min_from_to = FindMin(min_tree, 1, 0, num_input - 1, from, to);
+				int max_from_to = FindMax(max_tree, 1, 0, num_input - 1, from, to);
+				//cout << from << " " << min_from_to << " " << to << " " << max_from_to << " ";
+				if (from == min_from_to && to == max_from_to) {
+					cout << "YES\n";
+				}
+				else {
+					cout << "NO\n";
+				}
+				
+			}
 		}
 		
 	}
+	
+	
     
 
     return 0;
 }
-
