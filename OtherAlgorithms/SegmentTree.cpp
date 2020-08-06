@@ -49,6 +49,21 @@ ll update(vector<ll> &tree, ll node, ll start, ll end, ll index, ll diff) {//whe
 	
 }
 
+ll query(vector<ll>& tree, ll node, ll start, ll end, ll k) { //return index of array with accumulate sum contains k
+	if (start == end) {
+		return start;
+	}
+	else {
+		ll mid = (start + end) / 2;
+		if (tree[node * 2] >= k) { // search left side of the tree
+			return query(tree, node * 2, start, mid, k);
+		}
+		else {
+			return query(tree, node * 2 + 1, mid + 1, end, k - tree[node * 2]);
+		}
+	}
+}
+
 int InitMax (vector<int> &input_arr, vector<int> &tree, int node, int start, int end) { // when the node deals with sum from start to end
 	if (start == end) {
 		return tree[node] = input_arr[start];
@@ -121,6 +136,8 @@ int UpdateMax(vector<int> &tree, int node, int start, int end, int index, int ne
 		return tree[node] = max(UpdateMax(tree, 2 * node, start, mid, index, new_val), UpdateMax(tree, 2 * node + 1, mid + 1, end, index, new_val));
 	}
 } 
+
+
 
 
 
