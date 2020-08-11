@@ -3,13 +3,9 @@
 
 using namespace std;
 typedef long long ll;
-
-vector<ll> input_arr;
-vector<ll> tree;
-
-ll num_input;
-ll num_change;
-ll num_query;
+typedef pair<int, int> pll;
+const int MAX = 500001;
+const int INF = 987654321;
 
 ll init (vector<ll> &input_arr, vector<ll> &tree, ll node, ll start, ll end) { // when the node deals with sum from start to end
 	if (start == end) {
@@ -137,11 +133,20 @@ int UpdateMax(vector<int> &tree, int node, int start, int end, int index, int ne
 	}
 } 
 
+struct Rank {
+	int first;
+	int second;
+	int third;
+};
+vector<Rank> ranks;
+vector<int> input_arr;
+vector<int> min_tree;
+int num_input;
 
 
-
-
-
+bool comp(Rank a, Rank b) {
+	return a.first < b.first;
+}
 
 
 int main()
@@ -150,15 +155,56 @@ int main()
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
 	
-	std::ifstream in("in.txt");
-	std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-	std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
-	while (cin >> num_input >> num_query) {
 		
+	// std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+
+	while (cin >> num_input) {
+		input_arr.clear();
+		min_tree.clear();
+		ranks.clear();
 		
+		input_arr.resize(MAX, INF);
+		min_tree.resize(MAX * 4, INF);
+		ranks.resize(MAX);
+		for (int i = 0; i < num_input; i++) {
+			int num;
+			cin >> num;
+			num--;
+			ranks[num].first = i;
+		}
+		for (int i = 0; i < num_input; i++) {
+			int num;
+			cin >> num;
+			num--;
+			ranks[num].second = i;
+		}
+		for (int i = 0; i < num_input; i++) {
+			int num;
+			cin >> num;
+			num--;
+			ranks[num].third = i;
+		}
+		
+		sort(ranks.begin(), ranks.begin() + num_input, comp);
+		
+		int num_great_students = 0;
+		// for (int i = 0; i < num_input; i++) {
+		// 	cout << ranks[i].first << " " << ranks[i].second << " " << ranks[i].third << "\n";
+		// }
+		for (int i = 0; i < num_input; i++) {
+			int previous_rank_minimum = FindMin(min_tree, 1, 0, num_input - 1, 0, ranks[i].second);
+			if (previous_rank_minimum > ranks[i].third) {
+				num_great_students++;
+				//cout << i << " ";
+			}
+			input_arr[ranks[i].second] = ranks[i].third;
+			UpdateMin(min_tree, 1, 0, num_input - 1, ranks[i].second, ranks[i].third);
+		}
+		cout << num_great_students << "\n";
 	}
     
 
     return 0;
 }
-

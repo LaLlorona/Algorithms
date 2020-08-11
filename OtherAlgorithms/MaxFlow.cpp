@@ -1,68 +1,49 @@
 #include <bits/stdc++.h>
 
-
 using namespace std;
 
-int n;
-const int MAX_V = MAX_V;
+const int MAX = 801;
+int num_city, num_path;
+int capacity[MAX][MAX];
+int flow[MAX][MAX];
+vector<int> graph[MAX];
+
 const int INF = 987654321;
-int capacity[MAX_V][MAX_V];
-int flow[MAX_V][MAX_V];
 
-int num_cow, num_stable;
-
-int FordFulkerson(int source, int sink, int capacity[MAX_V][MAX_V]) {
-	
-	int ret = 0;
-	memset(flow, 0, sizeof(flow));
+int FoldFulkerson (int source, int sink) {
+	int total_flow = 0;
 	while (true) {
-		vector<int> parent(MAX_V, -1);
+		vector<int> parent(MAX + 1, -1);
 		queue<int> bfs_queue;
-		
-		bfs_queue.push(source);
 		parent[source] = source;
-		
-		while (!bfs_queue.empty() && parent[sink] == -1) {
-			int v = bfs_queue.front();
+		bfs_queue.push(source);
+		while (!(bfs_queue.empty() || parent[sink] != -1)) {
+			int here = bfs_queue.front();
 			bfs_queue.pop();
 			
-			for (int i = 0; i < MAX_V; i++) {
-				if (capacity[v][i] - flow[v][i] > 0 && parent[i] == -1) {
-					bfs_queue.push(i);
-					parent[i] = v;
+			for (int i = 0; i < graph[here].size(); i++) {
+				int there = graph[here][i];
+				if (parent[there] == -1 && capacity[here][there] - flow[here][there] > 0) {
+					parent[there] = here;
+					bfs_queue.push(there);
 				}
 			}
 		}
-		
 		if (parent[sink] == -1) {
-			
 			break;
 		}
-		
-		int current_vertex = sink;
-		int max_flow = INF;
-		
-		while (current_vertex != source) {
-			int parent_current_vertex = parent[current_vertex];
-			max_flow = min(max_flow, capacity[parent_current_vertex][current_vertex] - flow[parent_current_vertex][current_vertex]);
-			current_vertex = parent_current_vertex;
+		int current_flow = INF;
+		for (int i = sink; i != source; i = parent[i]) {
+			current_flow = min(current_flow, capacity[parent[i]][i] - flow[parent[i]][i]);
 		}
-		
-		current_vertex = sink;
-		
-		while (current_vertex != source) {
-			int parent_current_vertex = parent[current_vertex];
-			flow[parent_current_vertex][current_vertex] += max_flow;
-			flow[current_vertex][parent_current_vertex] -= max_flow;
-			current_vertex = parent_current_vertex;
-			
+		for (int i = sink; i != source; i = parent[i]) {
+			flow[parent[i]][i] += current_flow;
+			flow[i][parent[i]] -= current_flow;
 		}
-		ret += max_flow;
-		
-		
+		total_flow += current_flow;
 		
 	}
-	return ret;
+	return total_flow;
 }
 
 int main()
@@ -75,24 +56,7 @@ int main()
 	std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
 	std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
 	
-	int num_wanted_stable;
-	int wanted_stable;
-	while (cin >> num_cow >> num_stable) {
-		for (int i = 0; i < num_cow; i++) {
-			cin >> num_wanted_stable;
-			for (int j = 0; j < num_wanted_stable; j++) {
-				cin >> wanted_stable;
-				capacity[i + 2][wanted_stable + num_cow + 1] = 1;
-			}
-			capacity[0][2 + i] = 1;
-		}
-		for (int i = 0; i < num_stable; i++) {
-			capacity[2 + num_cow + i][1] = 1;
-		}
-		cout << FordFulkerson(0, 1, capacity) << "\n";
-		
-		
-	}
+
     
 
     return 0;
