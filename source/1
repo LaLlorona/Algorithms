@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+
+using namespace std;
+typedef long long ll;
+const int MOD = 1000000007;
+
+int num_building, seen_left, seen_right;
+
+ll num_combinations[31];
+
+void FillNumCombinations(){
+    num_combinations[0] = 0;
+    num_combinations[1] = 1;
+    num_combinations[2] = 2;
+
+    for (int i = 3; i < 31; i++) {
+        num_combinations[i] = (num_combinations[i - 1] + num_combinations[i - 2] * 3) % MOD;
+    }
+}
+int main()
+{
+    std::ios_base::sync_with_stdio(false); //seperate cin cout and stdin stdout
+    std::cin.tie(NULL); //untie cin and cout. When execute cin, it empties cout buffer, which takes time.
+	std::cout.tie(NULL);
+	
+    std::ifstream in("in.txt");
+    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+    std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+    FillNumCombinations();
+    int num;
+    while (cin >> num) {
+        if (num == 0){
+            break;
+        }
+        cout << num_combinations[num] << "\n";
+
+    }
+    return 0;
+}
+
+
