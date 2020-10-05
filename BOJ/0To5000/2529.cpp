@@ -2,49 +2,62 @@
 
 
 using namespace std;
+const int MAX = 100001;
+const int INF = 987654321;
+int begin_pos;
+int target_pos;
+int min_time_reach[MAX];
+int before_here[MAX];
 
-int n;
-bool visited[10];
-char operators[9];
-
-int num_operator;
-string max_cand;
-string min_cand;
-
-void Dfs(int index, string current_num) {
-	if (index == num_operator + 1) {
-		max_cand = max(max_cand, current_num);
-		min_cand = min(min_cand, current_num);
-	}
-	else {
-		for (int i = 0; i < 10; i++) {
-			if (!visited[i]) {
-				if (index == 0) {
-					visited[i] = true;
-					Dfs(index + 1, current_num + to_string(i));
-					visited[i] = false;
-				}
-				else {
-					if (operators[index - 1] == '<') {//i should be bigger than current_num[index - 1]
-						if (current_num[index - 1] - '0' < i) {
-							visited[i] = true;
-							Dfs(index + 1, current_num + to_string(i));
-							visited[i] = false;
-						}
-					}
-					else {// i should be smaller than current_num[index - 1]
-						if (current_num[index - 1] - '0' > i) {
-							visited[i] = true;
-							Dfs(index + 1, current_num + to_string(i));
-							visited[i] = false;
-						}
-					}
-				}
-			}
+bool IsInBound(int here) {
+	return (here >= 0 && here < MAX);
+}
+void FillMinTime() {
+	queue<int> bfs_queue;
+	min_time_reach[begin_pos] = 0;
+	before_here[begin_pos] = begin_pos;
+	bfs_queue.push(begin_pos);
+	
+	while (!bfs_queue.empty()) {
+		int here = bfs_queue.front();
+		bfs_queue.pop();
+		if (here == target_pos) {
+			break;
+		}
+		if (IsInBound(here + 1) && min_time_reach[here + 1] == INF) {
+			min_time_reach[here + 1] = min_time_reach[here] + 1;
+			before_here[here + 1] = here;
+			bfs_queue.push(here + 1);
+		}
+		if (IsInBound(here - 1) && min_time_reach[here - 1] == INF) {
+			min_time_reach[here - 1] = min_time_reach[here] + 1;
+			before_here[here - 1] = here;
+			bfs_queue.push(here - 1);
+			
+		}
+		if (IsInBound(here * 2) && min_time_reach[here * 2] == INF) {
+			min_time_reach[here * 2] = min_time_reach[here] + 1;
+			before_here[here * 2] = here;
+			bfs_queue.push(here * 2);
 		}
 	}
-	
 }
+void PrintAnswer() {
+	cout << min_time_reach[target_pos] << "\n";
+	int here = target_pos;
+	vector<int> path;
+	while (here != begin_pos) {
+		path.push_back(here);
+		here = before_here[here];
+	}
+	path.push_back(begin_pos);
+	
+	for (int i = path.size() - 1; i >= 0; i--) {
+		cout << path[i] << " ";
+	}
+	cout << "\n";
+}
+
 
 int main()
 {
@@ -55,16 +68,13 @@ int main()
 	// std::ifstream in("in.txt");
 	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
 	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
-	
-	while (cin >> num_operator) {
-		for (int i = 0; i < num_operator; i++) {
-			cin >> operators[i];
+	while (cin >> begin_pos >> target_pos) {
+		memset(before_here, -1, sizeof(before_here));
+		for (int i = 0; i < MAX; i++) {
+			min_time_reach[i] = INF;
 		}
-		
-		max_cand = string(num_operator + 1, '0');
-		min_cand = string(num_operator + 1, '9');
-		Dfs(0, "");
-		cout << max_cand << "\n" << min_cand << "\n";
+		FillMinTime();
+		PrintAnswer();
 	}
     
 
