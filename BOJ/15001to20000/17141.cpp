@@ -1,130 +1,104 @@
 #include <bits/stdc++.h>
-
-
+//#include <iostream>
+//#include <vector>
 using namespace std;
 
-int n;
-int lab_initial[51][51];
-int lab_after_spreading[51][51];
-int time_to_spread[51][51];
+vector<int> graph[11];
+int num_city;
+int people[11];
+int city_type[11];
+int visited[11];
 const int INF = 987654321;
 
-int num_total_active_virus;
-vector<pair<int, int> >possible_virus_position, temp;
-vector<vector<pair<int, int> > > combinations;
-int direction_y[4] = {-1, 0, 0, 1};
-int direction_x[4] = {0, -1, 1, 0};
 
-void FillCombinations(int current_index, int num_choose) {
-	if (num_choose == num_total_active_virus) {
-		combinations.push_back(temp);
-	}
-	else if (current_index < possible_virus_position.size()) {
-		temp.push_back(possible_virus_position[current_index]);
-		FillCombinations(current_index + 1, num_choose + 1);
-		temp.pop_back();
-		
-		FillCombinations(current_index + 1, num_choose);
-	}
+bool CheckBit(int num, int kth) {
+	return (num & (1 << kth)) > 0;
 }
 
-bool IsInBound(int y, int x) {
-	return (y >= 0 && y < n && x >= 0 && x < n);
-}
+void Reachable(int here, int here_type) {
+	visited[here] = here_type;
 
-void PreProcess() {
-	for (int y = 0; y < n; y++) {
-		for (int x = 0; x < n; x++) {
-			cin >> lab_initial[y][x];
-			lab_after_spreading[y][x] = lab_initial[y][x];
-			if (lab_initial[y][x] == 2){
-				possible_virus_position.push_back(make_pair(y, x));
-			}
-			time_to_spread[y][x] = INF;
+	for (int i = 0; i < graph[here].size(); i++) {
+		int there = graph[here][i];
+		if (visited[there] == 0 && city_type[there] == here_type) {
+			Reachable(there, here_type);
 		}
 	}
-	
 }
-void BFS(int try_index) {
-	queue<pair<int, int> > BFS_queue;
 
-	for (int i = 0; i < combinations[try_index].size(); i++) {
-		int activated_y = combinations[try_index][i].first;
-		int activated_x = combinations[try_index][i].second;
-		lab_after_spreading[activated_y][activated_x] = 3;
-		time_to_spread[activated_y][activated_x] = 0;
-		BFS_queue.push(make_pair(activated_y, activated_x));
-	}
-	while (!BFS_queue.empty()) {
-		int current_y = BFS_queue.front().first;
-		int current_x = BFS_queue.front().second;
-		BFS_queue.pop();
-		for (int i = 0 ; i < 4; i++) {
-			int next_y = current_y + direction_y[i];
-			int next_x = current_x + direction_x[i];
-			if (IsInBound(next_y, next_x) && lab_after_spreading[next_y][next_x] != 1 && time_to_spread[next_y][next_x] > time_to_spread[current_y][current_x] + 1) {
-				
-				lab_after_spreading[next_y][next_x] = 3;
-				time_to_spread[next_y][next_x] = time_to_spread[current_y][current_x] + 1;
-				BFS_queue.push(make_pair(next_y, next_x));
-			}
-		}
-	}
-	
-	
-}
 int Solve() {
-	int min_time_spread = INF;
-	for (int i = 0; i < combinations.size(); i++) {
-		int max_time_spread_this_case = 0;
-		for (int y = 0; y < n; y++) {
-			for (int x = 0; x < n; x++) {
-				lab_after_spreading[y][x] = lab_initial[y][x];
-				time_to_spread[y][x] = INF;
+	int total_possibility = (1 << num_city) - 1;
+	int min_cand = INF;
+	for (int i = 1; i < total_possibility; i++) {
+		int city1, city2;
+		for (int j = 0; j < num_city; j++) {
+			if (CheckBit(i, j)) {
+				city_type[j] = 1;
+				city1 = j;
+			}
+			else {
+				city_type[j] = 2;
+				city2 = j;
 			}
 		}
-		BFS(i);
-		for (int y = 0; y < n; y++) {
-			for (int x = 0; x < n; x++) {
-				if (lab_after_spreading[y][x] != 1){
-					max_time_spread_this_case = max(max_time_spread_this_case, time_to_spread[y][x]);
-				}
-			}
-		}
-		// if (min_time_spread > max_time_spread_this_case) {
-		// 	for (int k = 0; k < combinations[i].size(); k++) {
-		// 		cout << combinations[i][k].first << "," << combinations[i][k].second << " ";
-		// 	}
-		// 	cout << "\n";
-		// 	for (int y = 0; y < n; y++) {
-		// 		for (int x = 0; x < n; x++) {
-		// 			cout << time_to_spread[y][x] << " ";
-		// 		}
-		// 		cout << "\n";
-		// 	}
-		// 	for (int y = 0; y < n; y++) {
-		// 		for (int x = 0; x < n; x++) {
-		// 			cout << lab_after_spreading[y][x] << " ";
-		// 		}
-		// 		cout << "\n";
-		// 	}
+		memset(visited, 0, sizeof(visited));
+		Reachable(city1, 1);
+		Reachable(city2, 2);
+		// cout << i << "\n";
+		// cout << "city 1,2 " << city1 << " " << city2 <<"\n"; 
+		// for (int j = 0; j < num_city; j++) {
+		// 	cout << city_type[j] << " ";
 		// }
-		min_time_spread = min(min_time_spread, max_time_spread_this_case);
-		
+		// cout << "\n";
+		// for (int j = 0; j < num_city; j++) {
+		// 	cout << visited[j] << " ";
+		// }
+		// cout << "\n";
+		bool seperatable = true;
+		for (int j = 0; j < num_city; j++) {
+			if (visited[j] == 0) {
+				seperatable = false;
+				break;
+			}
+			else if (visited[j] == 1 && city_type[j] != 1) {
+				seperatable = false;
+				break;
+			}
+			else if (visited[j] == 2 && city_type[j] != 2) {
+				seperatable = false;
+				break;
+			}
+		}
+		if (!seperatable) {
+			continue;
+		}
+		int people_city1, people_city2;
+		people_city1 = 0;
+		people_city2 = 0;
+		for (int j = 0; j < num_city; j++) {
+			if (city_type[j] == 1) {
+				people_city1 += people[j];
+			}
+			else {
+				people_city2 += people[j];
+			}
+		}
+		min_cand = min(min_cand, abs(people_city1 - people_city2));
 	}
-	if (min_time_spread == INF) {
+	if (min_cand == INF) {
 		return -1;
 	}
-	else{
-		return min_time_spread;
+	else {
+		return min_cand;
 	}
-	
-	
 }
 
 
-int main()
-{
+
+
+
+
+int main() {
 	std::ios_base::sync_with_stdio(false); 
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
@@ -133,24 +107,28 @@ int main()
 	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
 	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
 
-	while (cin >> n >> num_total_active_virus) {
-		combinations.clear();
-		possible_virus_position.clear();
-		temp.clear();
-		
-		PreProcess();
-		FillCombinations(0, 0);
-		// for (int i = 0 ;i < combinations.size(); i++) {
-		// 	for (int j = 0; j < combinations[i].size(); j++) {
-		// 		cout << combinations[i][j].first << "," << combinations[i][j].second << " ";
-		// 	}
-		// 	cout << "\n";
-		// }
+	while (cin >> num_city) {
+		for (int i = 0; i < 11; i++) {
+			graph[i].clear();
+		}
+		for (int i = 0; i < num_city; i++) {
+			cin >> people[i];
+		}
+		for (int i = 0; i < num_city; i++) {
+			int num_adjacent;
+			cin >> num_adjacent;
+			for (int j = 0; j < num_adjacent; j++) {
+				int adjacent;
+				cin >> adjacent;
+				adjacent = adjacent - 1;
+				graph[i].push_back(adjacent);
+				graph[adjacent].push_back(i);
+			}
+		}
 		cout << Solve() << "\n";
-	
 	}
-    
 
-    return 0;
+
+
+	return 0;
 }
-
