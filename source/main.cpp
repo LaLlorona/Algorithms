@@ -1,51 +1,53 @@
 #include <bits/stdc++.h>
 
-
 using namespace std;
-typedef long long ll;
-//const int MOD = 1000000007;
 
+#define NAME_SIZE 50
+class Person {
+	int id;
+	char name[NAME_SIZE];
 
-ll num_combinations[31][31];
+	public:
+		virtual bool addCourse(string s) = 0;
 
-ll CalcNumComb(int one, int half) {
-    if (one == 0) {
-        return 1;
-    }
-    else {
-        ll& ret = num_combinations[one][half];
-        if (ret != -1) {
-            return ret;
-        }
-        ret = 0;
-        ret += CalcNumComb(one - 1, half + 1);
-        if (half > 0) {
-            ret += CalcNumComb(one, half - 1);
-        }
-        return ret;
-    }
-}
+		virtual ~Person() {
+			cout << "deleting a person.\n";
+		}
+		
+};
+class Student : public Person {
+	public:
+		void aboutMe() {
+			cout << "I am a student\n";
+		}
+
+		bool addCourse(string s) {
+			cout << "Added course " << s << " to student.\n";
+			return true;
+		}
+
+		~Student() {
+			cout << "deleting a student\n";
+		}
+};
 
 int main()
 {
-    std::ios_base::sync_with_stdio(false); //seperate cin cout and stdin stdout
-    std::cin.tie(NULL); //untie cin and cout. When execute cin, it empties cout buffer, which takes time.
-	std::cout.tie(NULL);
-//
-//    std::ifstream in("in.txt");
-//    std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
-//    std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
-    int num;
-    memset(num_combinations, -1, sizeof(num_combinations));
-    while (cin >> num) {
-        if (num == 0) {
-            break;
-        }
-        else {
-            cout << CalcNumComb(num, 0) << "\n";
-        }
-    }
-    return 0;
+  // std::ios_base::sync_with_stdio(false);
+  // std::cin.tie(NULL);
+  // std::cout.tie(NULL);
+
+	
+	Person* a_student = new Student();
+	a_student->addCourse("mathematics");
+	delete a_student;
+
+	// Person* a_person = new Person();
+	// a_person->addCourse("asdf");
+	// a_student->onlyStudent();
+
+  
+  
+
+  return 0;
 }
-
-
