@@ -1,53 +1,49 @@
 #include <bits/stdc++.h>
 
+
 using namespace std;
+typedef long long ll;
 
-#define NAME_SIZE 50
-class Person {
-	int id;
-	char name[NAME_SIZE];
+ll total_game, won_game;
 
-	public:
-		virtual bool addCourse(string s) = 0;
-
-		virtual ~Person() {
-			cout << "deleting a person.\n";
+ll FindMinGame() {
+	ll lo = 0;
+	ll hi = 2000000000;
+	ll ans = hi + 1;
+	if ((won_game * 100) / total_game >= 99) {
+		return -1;
+	}
+	else {
+		while (lo <= hi) {
+			ll mid = (lo + hi) / 2;
+			if ((won_game * 100)/ total_game < ((won_game + mid)* 100) / (total_game + mid)) {// if win rate increase if play 'mid' number of games
+				hi = mid - 1;
+				ans = min(ans, mid);
+			}
+			else {
+				lo = mid + 1;
+			}
 		}
-		
-};
-class Student : public Person {
-	public:
-		void aboutMe() {
-			cout << "I am a student\n";
-		}
+	}
+	return ans;
+}
 
-		bool addCourse(string s) {
-			cout << "Added course " << s << " to student.\n";
-			return true;
-		}
-
-		~Student() {
-			cout << "deleting a student\n";
-		}
-};
 
 int main()
 {
-  // std::ios_base::sync_with_stdio(false);
-  // std::cin.tie(NULL);
-  // std::cout.tie(NULL);
-
+	std::ios_base::sync_with_stdio(false); //seperate cin cout and stdin stdout
+	std::cin.tie(NULL); //untie cin and cout. When execute cin, it empties cout buffer, which takes time.
+	std::cout.tie(NULL);
 	
-	Person* a_student = new Student();
-	a_student->addCourse("mathematics");
-	delete a_student;
+	// std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); //save old buf
+	// std::cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+	
+	while (cin >> total_game >> won_game) {
+		cout << FindMinGame() << "\n";
+	}
+    
 
-	// Person* a_person = new Person();
-	// a_person->addCourse("asdf");
-	// a_student->onlyStudent();
-
-  
-  
-
-  return 0;
+    return 0;
 }
+
