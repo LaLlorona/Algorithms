@@ -47,9 +47,9 @@ int main()
 
     
 
-    std::ifstream in("in.txt");
-	std::streambuf *cinbuf = std::cin.rdbuf(); 
-	std::cin.rdbuf(in.rdbuf()); 
+    // std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); 
+	// std::cin.rdbuf(in.rdbuf()); 
 
 
     while (cin >> numVertice >> numEdge >> beginVertex) {
@@ -70,7 +70,7 @@ int main()
         }
 
         for (int i = 1; i <= numVertice; i++) {
-            sort(graph[i].begin(), graph[i].end(), greater<int>());
+            sort(graph[i].begin(), graph[i].end());
         }
 
         BFS(beginVertex);

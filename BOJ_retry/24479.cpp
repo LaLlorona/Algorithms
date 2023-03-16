@@ -11,32 +11,22 @@ vector<int> graph[MAX];
 int visited[MAX];
 int visitOrder = 1;
 
-queue<int> bfsQueue;
-
-void BFS(int beginPoint) {
-    
-    bfsQueue.push(beginPoint);
-
-    
-
-    while (!bfsQueue.empty()) {
-        int here = bfsQueue.front();
-        bfsQueue.pop();
-        if (visited[here] == 0) {
-            visited[here] = visitOrder;
-            visitOrder++;
-            for (int i = 0 ; i < graph[here].size(); i++) {
-                int there = graph[here][i];
-                if (visited[there] == 0) {
-                    bfsQueue.push(there);
-                }
-            }
-        }
-
+void DFS(int from) {
+    if (from == beginVertex) {
+        visited[from] = 1;
     }
-    
-}
 
+    for (int i = 0; i < graph[from].size(); i++) {
+        int to = graph[from][i];
+        if (visited[to] == 0) {
+            visitOrder++;
+            visited[to] = visitOrder;
+            DFS(to);
+        }
+    }
+
+
+}
 
 int main()
 {
@@ -47,9 +37,9 @@ int main()
 
     
 
-    std::ifstream in("in.txt");
-	std::streambuf *cinbuf = std::cin.rdbuf(); 
-	std::cin.rdbuf(in.rdbuf()); 
+    // std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); 
+	// std::cin.rdbuf(in.rdbuf()); 
 
 
     while (cin >> numVertice >> numEdge >> beginVertex) {
@@ -70,12 +60,10 @@ int main()
         }
 
         for (int i = 1; i <= numVertice; i++) {
-            sort(graph[i].begin(), graph[i].end(), greater<int>());
+            sort(graph[i].begin(), graph[i].end());
         }
 
-        BFS(beginVertex);
-
-        
+        DFS(beginVertex);
 
         for (int i = 1 ;i <= numVertice; i++) {
             cout << visited[i] << "\n";

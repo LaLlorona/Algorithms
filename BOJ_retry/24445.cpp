@@ -47,9 +47,9 @@ int main()
 
     
 
-    std::ifstream in("in.txt");
-	std::streambuf *cinbuf = std::cin.rdbuf(); 
-	std::cin.rdbuf(in.rdbuf()); 
+    // std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); 
+	// std::cin.rdbuf(in.rdbuf()); 
 
 
     while (cin >> numVertice >> numEdge >> beginVertex) {
