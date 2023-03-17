@@ -3,11 +3,12 @@
 using namespace std;
 
 
-const int MAX = 103;
+const int MAX = 1003;
 vector<int> graph[MAX];
 
 int numVertice;
 int numEdge;
+int beginPoint;
 bool visited[MAX];
 vector<int> dfsResult;
 vector<int> bfsResult;
@@ -16,13 +17,14 @@ queue<int> bfsQueue;
 
 void DFS(int from) {
     visited[from] = true;
-    cout << "from dfs: " << from << "\n"; 
+    dfsResult.push_back(from);
+
 
     for (int i = 0 ; i < graph[from].size(); i++) {
         int there = graph[from][i];
         if (!visited[there]) {
             visited[there] = true;
-            dfsResult.push_back(there);
+        
             DFS(there);
         }
     }
@@ -35,7 +37,7 @@ void Bfs(int begin) {
     while (!bfsQueue.empty()) {
         int here = bfsQueue.front();
         bfsQueue.pop();
-        cout << "from bfs: " << here << "\n"; 
+
 
         bfsResult.push_back(here);
         visited[here] = true;
@@ -43,6 +45,7 @@ void Bfs(int begin) {
         for (int i = 0; i < graph[here].size(); i++) {
             int there = graph[here][i];
             if (!visited[there]) {
+                visited[there] = true;
                 bfsQueue.push(there);
             }
         }
@@ -67,11 +70,11 @@ int main()
 
     
 
-    std::ifstream in("in.txt");
-	std::streambuf *cinbuf = std::cin.rdbuf(); 
-	std::cin.rdbuf(in.rdbuf()); 
+    // std::ifstream in("in.txt");
+	// std::streambuf *cinbuf = std::cin.rdbuf(); 
+	// std::cin.rdbuf(in.rdbuf()); 
 
-    while (cin >> numVertice >> numEdge) {
+    while (cin >> numVertice >> numEdge >> beginPoint) {
 
         for (int i = 0; i <= numVertice; i++) {
             graph[i].clear();
@@ -90,9 +93,9 @@ int main()
             sort(graph[i].begin(), graph[i].end());
         }
         memset(visited, 0 , sizeof(visited));
-        DFS(1);
+        DFS(beginPoint);
         memset(visited, 0 , sizeof(visited));
-        Bfs(1);
+        Bfs(beginPoint);
         PrintVector(dfsResult);
         PrintVector(bfsResult);
        
