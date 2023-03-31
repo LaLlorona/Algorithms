@@ -2,42 +2,12 @@
 
 using namespace std;
 
-int numDays;
-int consecutiveDays;
+int numVertice;
+int numEdge;
 
-const int MAX = 100001;
-const int INF = 987654321;
+const int MAX = 20001;
 
-int temperatureRecord[MAX];
-int partialSumArray[MAX];
-
-
-void FillPartialSum() {
-	partial_sum(temperatureRecord, temperatureRecord + numDays, partialSumArray);
-	// for (int i = 0 ; i < numDays; i++) {
-	// 	cout << partialSumArray[i] << " ";
-	// }
-	// cout << "\n";
-}
-
-int returnSum(int from, int to) {
-	if (from == 0) {
-		return partialSumArray[to];
-	}
-	else {
-		return partialSumArray[to] - partialSumArray[from - 1];
-	}
-}
-
-void PrintMaxSum() {
-	int maxCand = -INF;
-	for (int i = 0 ; i + consecutiveDays - 1 < numDays; i++) {
-		// cout << maxCand << " ";
-		maxCand = max(maxCand, returnSum(i, i + consecutiveDays - 1));
-		// cout << "\n";
-	}
-	cout << maxCand << "\n";
-}
+vector<int> graph[MAX];
 
 
 int main()
