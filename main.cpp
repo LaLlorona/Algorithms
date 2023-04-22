@@ -1,36 +1,25 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+typedef long long ll;
 
-typedef pair<int, int> pii;
-stack<pii> numberStack; //number, index
-
-vector<int> solution(vector<int> numbers) {
-    
-    vector<int> answer(numbers.size(), -1);
-    
-    for (int i = 0; i < numbers.size(); i++) {
-        while (!numberStack.empty()) {
-            pii currentNumber = numberStack.top();
-            if (currentNumber.first >= numbers[i]) {
-                break;
-            }
-            numberStack.pop();
-            answer[currentNumber.second] = numbers[i];
-        }
-        numberStack.push(pii(numbers[i], i));
-    }
+vector<int> possibleCombination(int n) {
+    vector<int> answer = {n, 2 * n, 3 * n, 4 * n};
     return answer;
-
-    
 }
 
-void PrintVector(vector<int> vec) {
-    for (int i = 0; i < vec.size(); i++) {
-        cout << vec[i] << "\n";
+
+
+long long solution(vector<int> weights) {
+    map<int, ll> possibleWeights;
+    long long answer = 0;
+
+    for (int i = 0; i < weights.size(); i++) {
+        
     }
+    
+    return answer;
 }
-
 
 int main()
 {
@@ -44,9 +33,6 @@ int main()
     std::ifstream in("in.txt");
 	std::streambuf *cinbuf = std::cin.rdbuf(); 
 	std::cin.rdbuf(in.rdbuf()); 
-    vector<int> test1 = {2, 3, 3, 5};
-    vector<int> ans = solution(test1);
-    PrintVector(ans);
 
 }
 
