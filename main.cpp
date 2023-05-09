@@ -84,7 +84,7 @@ int main()
 	std::cin.tie(NULL); 
 	std::cout.tie(NULL);
 
-    
+    string test = "asdfasdf";
 
     std::ifstream in("in.txt");
 	std::streambuf *cinbuf = std::cin.rdbuf(); 
