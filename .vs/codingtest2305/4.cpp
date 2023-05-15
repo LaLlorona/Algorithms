@@ -29,29 +29,20 @@ long long solution(string block, int pos) {
 	}
 	answer += hi - lo;
 
-	while (lo >= 0 && hi < block.size()) {
-		if (currentPos == lo) { // we need to increase hi
-			// cout << "current Pos is lo, and we will increase hi.\n" ;
-			// cout << "current lo hi value is lo is " << lo << " hi value is " << hi << "\n";
-			
+	while (IsInBound(block, lo) && IsInBound(block, hi)) {
+		if (currentPos == lo) { // we need to increase hi		
 			hi += 1;
 			while (IsInBound(block, hi) && block[hi] != '<') {
 				hi +=1;
 			}
-			// cout << "after update, hi value is " << hi << "\n";
 			currentPos = hi;
 		}
 		else { // we need to decrease lo
-			// cout << "current Pos is hi, and we will decrease lo.\n" ;
-				// cout << "current lo hi value is lo is " << lo << " hi value is " << hi << "\n";
 				lo -= 1;
 				while (IsInBound(block, lo) && lo < 0) {
 					lo -= 1;
 				}
-				// cout << "after update, lo value is " << lo << "\n";
 				currentPos = lo;
-				
-				
 		}
 		answer += hi - lo;
 	}
